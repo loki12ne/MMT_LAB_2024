@@ -14,10 +14,10 @@ PORT = 65432
 # finally:
 #     client.close()
 
-def receiveFile(client_socket, file_name):
+def receiveFile(client_socket, file_name, file_size):
     # Receive file size
-    file_size = int(client_socket.recv(1024).decode('utf-8')) #size in megabytes
-    file_size *= 1e6 #size in bytes
+    # file_size = int(client_socket.recv(1024).decode('utf-8')) #size in megabytes
+    # file_size *= 1e6 #size in bytes
 
     # Receive file data by chunk = 1024 bytes
     received_size = 0
@@ -61,12 +61,20 @@ def main():
     server_address = (HOST, PORT)
     client_socket.connect(server_address)
 
-    file_name = "input.txt"
-    receiveFile(file_name)
+    file_name = "input.txt" #jj đó
 
-    # close socket 
-    client_socket.close()
-    # vde là làm s chạy Ctrl + C dưới nền
+    try: 
+        while True:
+            # Read file list
+            # ==============
+            
+            # ==============
+            file_name, file_size
+            receiveFile(client_socket, file_name, file_size)
+    except KeyboardInterrupt:
+        client.close()
+    finally:
+        client.close()
 
 if __name__ == "__main__":
     main()
