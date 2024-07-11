@@ -19,8 +19,7 @@ def receiveFile(client_socket, file_name, file_size):
                 break
             file.write(data)
             received_size += 1024
-
-        # Print PROGESSING BAR
+            # Print PROGESSING BAR
 
 # Check whether the file exists in the file list
 def isValidFile(files, file_name):
@@ -52,11 +51,11 @@ def main():
     server_address = (HOST, PORT)
     client_socket.connect(server_address)
 
-    file_list = "input.txt" #jj đó
+    files_list = "input.txt" #jj đó
 
     try:
         while True:
-            # Read file list -> return file_names[], file_sizes[] (?)
+            # READ FILE LIST -> return file_names[], file_sizes[] (?)
             file_name = input('Enter a file name: ')
             client_socket.send(bytes(file_name, "utf8"))
             
