@@ -2,7 +2,7 @@
 import socket 
 
 HOST = "127.0.0.1"
-PORT = 65422
+PORT = 65421
 
 def sendFileList(client_socket):
     with open("data.txt", "r") as file:
