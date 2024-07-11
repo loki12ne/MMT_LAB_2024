@@ -4,6 +4,7 @@ import os
 HOST = "127.0.0.1"
 PORT = 65432
 
+# File size is expected to be converted to bytes
 def receiveFile(client_socket, file_name, file_size):
     # Receive file size
     # file_size = int(client_socket.recv(1024).decode('utf-8')) #size in megabytes
@@ -22,7 +23,7 @@ def receiveFile(client_socket, file_name, file_size):
         # Print PROGESSING BAR
 
 # Check whether the file exists in the file list
-def isValidFile(files, file_name)
+def isValidFile(files, file_name):
     if file_name not in files:
         return False, -1 #-1 là index, idx = -1 thì file ko tồn tại trong mảng
     else:
@@ -51,16 +52,16 @@ def main():
     server_address = (HOST, PORT)
     client_socket.connect(server_address)
 
-    files = "input.txt" #jj đó
+    file_list = "input.txt" #jj đó
 
     try:
         while True:
             # Read file list -> return file_names[], file_sizes[] (?)
             file_name = input('Enter a file name: ')
-
+            client_socket.send(bytes(file_name, "utf8"))
+            
             flag, i = isValidFile(file_names, file_name) #ktra ten file client nhap vao co ton tai
             if flag:
-                client_socket.send(bytes(file_name, "utf8"))
                 file_size = file_sizes[i]
                 file_name = checkFileExistence(file_names, file_name) # ktra lai dong nay
                 receiveFile(client_socket, file_name, file_size)
