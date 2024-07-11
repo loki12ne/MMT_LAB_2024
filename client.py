@@ -4,16 +4,6 @@ import os
 HOST = "127.0.0.1"
 PORT = 65432
 
-# try:
-#     while True:
-#         msg = input('Client: ')
-#         client.sendall(bytes(msg, "utf8"))
-#     # client.sendall(b"This is the message from client")
-# except KeyboardInterrupt:
-#     client.close()
-# finally:
-#     client.close()
-
 def receiveFile(client_socket, file_name, file_size):
     # Receive file size
     # file_size = int(client_socket.recv(1024).decode('utf-8')) #size in megabytes
@@ -31,11 +21,14 @@ def receiveFile(client_socket, file_name, file_size):
 
         # Print PROGESSING BAR
 
-def checkFile(files, file_name):
-    # Check whether the file exists in the file list
+# Check whether the file exists in the file list
+def isValidFile(files, file_name)
     if file_name not in files:
-        return
-    
+        return False, -1 #-1 là index, idx = -1 thì file ko tồn tại trong mảng
+    else:
+        return True, files.index(file_name) #trả về idx của file_name để cập nhật file_size lun
+        
+def checkFileExistence(files, file_name):
     # Check whether the file has been downloaded
     program_path = os.getcwd()
     file_path = os.path.join(program_path, file_name)
@@ -51,30 +44,33 @@ def renameFile(file_name, count):
     # Insert number if the file has already been downloaded
     name, ext = os.path.splitext(file_name)
     new_name = f"{name} ({count}){ext}"
-
     return new_name
-    
-            
 
 def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_address = (HOST, PORT)
     client_socket.connect(server_address)
 
-    file_name = "input.txt" #jj đó
+    files = "input.txt" #jj đó
 
-    try: 
+    try:
         while True:
-            # Read file list
-            # ==============
-            
-            # ==============
-            file_name, file_size
-            receiveFile(client_socket, file_name, file_size)
+            # Read file list -> return file_names[], file_sizes[] (?)
+            file_name = input('Enter a file name: ')
+
+            flag, i = isValidFile(file_names, file_name) #ktra ten file client nhap vao co ton tai
+            if flag:
+                client_socket.send(bytes(file_name, "utf8"))
+                file_size = file_sizes[i]
+                file_name = checkFileExistence(file_names, file_name) # ktra lai dong nay
+                receiveFile(client_socket, file_name, file_size)
+            else:
+                pass
+        
     except KeyboardInterrupt:
-        client.close()
+        client_socket.close()
     finally:
-        client.close()
+        client_socket.close()
 
 if __name__ == "__main__":
     main()
