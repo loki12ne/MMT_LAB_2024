@@ -13,14 +13,20 @@ def sendFileList(client_socket):
             client_socket.send(bytes(chunk, "utf8"))
     client_socket.send(b"File read complete")
 
-def sendFile(client_socket, file_name):
-    try:
-        with open(file_name, "rb") as file:
-            data = file.read()
-            client_socket.send(data)
-    except FileNotFoundError:
-        print(f"File {file_name} not found on the server.")
-    client_socket.send(b"File read complete")
+def sendMultipleFile(client_socket, file_name):
+    while True:
+        data = client_socket.recv(1024)
+        if not data:
+            break
+        file_name = data.decode("utf8")
+        try:
+            with open(file_name, "rb") as file:
+                data = file.read()
+                client_socket.send(data)
+        except FileNotFoundError:
+            print(f"File {file_name} not found on the server.")
+        client_socket.send(b"File read complete")
+
 
 def main():
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -41,8 +47,7 @@ def main():
                     break
                 file_name = data.decode("utf8")
                 print(f"Received file name: {file_name}")
-                sendFile(client_socket, file_name)
-                print(f"Sent file {file_name} successfully!")
+                sendMultipleFile(client_socket, file_name) 
                 
     except KeyboardInterrupt:
             client_socket.close()
