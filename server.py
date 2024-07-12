@@ -4,6 +4,7 @@ import socket
 HOST = "127.0.0.1"
 PORT = 65422
 
+
 def sendFileList(client_socket):
     with open("data.txt", "r") as file:
        while True:
@@ -13,10 +14,10 @@ def sendFileList(client_socket):
             client_socket.send(bytes(chunk, "utf8"))
     client_socket.send(b"File read complete")
 
+#nhan ten file roi gui
 def sendMultipleFile(client_socket):
     try:
         while True:
-            print("HEHE")
             data = client_socket.recv(1024)
             if not data:
                 break
