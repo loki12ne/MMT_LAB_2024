@@ -4,13 +4,15 @@ import os
 HOST = "127.0.0.1"
 PORT = 65432
 
+# chưa có hàm receiveFileList (tên tự chọn)
+# return file_names, file_sizes nhé
 
 # file_names và file_sizes là 2 mảng nhận được sau khi đọc
 # danh sách các file từ server
 def receiveFile(client_socket, file_names, file_sizes):
     for i in file_names:
         if not isValidFile(file_names, file_names[i]):
-            return
+            continue
 
         received_size = 0
         with open(file_names[i], "wb") as file:
@@ -20,8 +22,7 @@ def receiveFile(client_socket, file_names, file_sizes):
                     break
                 file.write(data)
                 received_size += 1024
-            # 
-    
+                # PROGESSING BAR
 
 def isValidFile(file_names, file):
     # Check whether the file exists in the file list
