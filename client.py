@@ -22,7 +22,10 @@ def receiveFile(client_socket, file_names, file_sizes):
                     break
                 file.write(data)
                 received_size += 1024
-                # PROGESSING BAR
+
+                # Progessing bar
+                progress = (received_size / file_sizes[i]) * 100
+                print(f'Downloading {file_names[i]} .... {progress:.2f}%')
 
 def isValidFile(file_names, file):
     # Check whether the file exists in the file list
