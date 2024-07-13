@@ -3,40 +3,57 @@ import os
 
 HOST = "127.0.0.1"
 PORT = 65432
+_file = "input.txt"
+# _file      là *.txt tên các file cần tải
+# file_names là [] nhận được sau khi đọc
 
-# chưa có hàm receiveFileList (tên tự chọn)
-# return file_names, file_sizes nhé
 
-
-# _file *.txt là tên các file cần tải
-def sendFile(client_socket, _file):
-    with open(_file, "r") as file:
+def sendFileRequire(client_socket, _file): #nghe đá đá -> ai đó hãy sửa lại
+    with open(_file, "r") as f:
         while True:
-            file_datas = file.read()
+            file_datas = f.read()
             if not file_datas:
                 break
             client_socket.send(file_datas.encode('utf-8'))
 
 
-# file_names và file_sizes là 2 mảng nhận được sau khi đọc
-# danh sách các file từ server
-def receiveFile(client_socket, file_names, file_sizes):
+def readInput(_file):
+    file_names = []
+    try:
+        with open(_file, 'r') as f:
+            for line in f:
+                buf = line.strip()
+                if buf:
+                    file_names.append(buf)
+    except FileNotFoundError:
+        print(f"File {_file} not found.")
+    return file_names
+
+
+def receiveFile(client_socket, file_names):
     for i in file_names:
         if not isValidFile(file_names, file_names[i]):
             continue
 
         received_size = 0
-        with open(file_names[i], "wb") as file:
-            while received_size < file_sizes[i]:
+        file_size = client_socket.recv(1024)
+        with open(file_names[i], "wb") as f:
+            while received_size < file_size:
                 data = client_socket.recv(1024)
                 if not data:
                     break
-                file.write(data)
+                f.write(data)
                 received_size += 1024
 
-                # Progessing bar
-                progress = (received_size / file_sizes[i]) * 100
+                # Progressing bar
+                progress = (received_size / file_size) * 100
                 print(f'Downloading {file_names[i]} .... {progress:.2f}%')
+        
+        # Receive EOF
+        data = client_socket.recv(1024) # thấy insecure chỗ này s s
+        buf = data.decode('utf-8')
+        if buf == "---///---///---///==":
+            pass
 
 
 def isValidFile(file_names, file):
@@ -61,12 +78,8 @@ def main():
 
     try:
         while True:
-            # HÀM ĐỌC FILE -> return file_names[], file_sizes[]
-            # =====================================================
-            file_names = ["File1.zip", "File2.zip"] #ảo
-            file_sizes = [15, 25]                   #ảo
-            # =====================================================
-            receiveFile(client_socket, file_names, file_sizes)
+            file_names = readInput(_file) #lỡ đặt biến cục bộ r, nếu fix thì báo lại nhé
+            receiveFile(client_socket, file_names)
     except KeyboardInterrupt:
         client_socket.close()
     finally:
