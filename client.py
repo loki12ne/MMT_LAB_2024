@@ -52,7 +52,7 @@ def receiveFile(client_socket, file_names):
         # Receive EOF
         data = client_socket.recv(1024) # thấy insecure chỗ này s s
         buf = data.decode('utf-8')
-        if buf == "---///---///---///==":
+        if buf == b"---///---///---///==":
             pass
 
 
