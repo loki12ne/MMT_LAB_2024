@@ -8,7 +8,7 @@ _file = "input.txt"
 # file_names là [] nhận được sau khi đọc
 
 
-def sendFileRequire(client_socket, _file): #nghe đá đá -> ai đó hãy sửa lại
+def sendRequest    (client_socket, _file):
     with open(_file, "r") as f:
         while True:
             file_datas = f.read()
@@ -36,13 +36,13 @@ def receiveFile(client_socket, file_names):
             continue
 
         received_size = 0
-        file_size = client_socket.recv(1024)
+        file_size = client_socket.recv(1024).decode('utf-8')
         with open(file_names[i], "wb") as f:
             while True:
-                data = client_socket.recv(1024) # how to make sure recv 1024
-                if not data: # if data != 1024
+                data = client_socket.recv(1024).decode('utf-8')
+                if not data:
                     break
-                if data == b"---///---///---///==":
+                if data == "---///---///---///==":
                     break
                 f.write(data)
                 received_size += len(data) 
@@ -52,7 +52,7 @@ def receiveFile(client_socket, file_names):
                 print(f'Downloading {file_names[i]} .... {progress:.2f}%')
         
         # Receive EOF
-        # data = client_socket.recv(1024) # thấy insecure chỗ này s s
+        # data = client_socket.recv(1024)
         # buf = data.decode('utf-8')
 
 
@@ -78,7 +78,10 @@ def main():
 
     try:
         while True:
-            file_names = readInput(_file) #lỡ đặt biến cục bộ r, nếu fix thì báo lại nhé
+            file_names = readInput(_file)
+            if not file_names:
+                client_socket.close()
+                break
             receiveFile(client_socket, file_names)
     except KeyboardInterrupt:
         client_socket.close()
