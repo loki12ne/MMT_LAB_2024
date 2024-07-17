@@ -2,8 +2,7 @@
 import socket 
 
 HOST = "127.0.0.1"
-PORT = 65422
-
+PORT = 65421
 
 def sendFileList(client_socket):
     with open("data.txt", "r") as file:
@@ -14,21 +13,20 @@ def sendFileList(client_socket):
             client_socket.send(bytes(chunk, "utf8"))
     client_socket.send(b"File read complete")
 
-#nhan ten file roi gui
-def sendMultipleFile(client_socket):
+def sendMultipleFile(client_socket, file_names):
     try:
-        while True:
-            data = client_socket.recv(1024)
-            if not data:
-                break
-            file_name = data.decode("utf8")
-            try:
-                with open(file_name, "rb") as file:
-                    data = file.read()
-                    client_socket.send(data)
-            except FileNotFoundError:
-                print(f"File {file_name} not found on the server.")
-            client_socket.send(b"File read complete")
+        for i in file_names:
+            while True:
+                try:
+                    with open(file_names[i], "rb") as file:
+                        while True:
+                            data = file.read(1024)
+                            if not data:
+                                break
+                            client_socket.send(data)
+                except FileNotFoundError:
+                    print(f"File {file_names[i]} not found on the server.")
+                client_socket.send(b"---///---///---///==")
     except KeyboardInterrupt:
         client_socket.close()
     finally:
@@ -47,7 +45,13 @@ def main():
             client_socket, client_address = server_socket.accept() 
             print(f"Client connected from {client_address}")
             sendFileList(client_socket)
-            sendMultipleFile(client_socket)
+            file_names = []
+            while True:
+                file_name = client_socket.recv(1024).decode()  
+                if not file_name:  
+                    break
+            file_names.append(file_name)
+            sendMultipleFile(client_socket, file_names)
 
     except KeyboardInterrupt:
         client_socket.close()
