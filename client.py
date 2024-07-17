@@ -38,22 +38,22 @@ def receiveFile(client_socket, file_names):
         received_size = 0
         file_size = client_socket.recv(1024)
         with open(file_names[i], "wb") as f:
-            while received_size < file_size:
-                data = client_socket.recv(1024)
-                if not data:
+            while True:
+                data = client_socket.recv(1024) # how to make sure recv 1024
+                if not data: # if data != 1024
+                    break
+                if data == b"---///---///---///==":
                     break
                 f.write(data)
-                received_size += 1024
+                received_size += len(data) 
 
                 # Progressing bar
                 progress = (received_size / file_size) * 100
                 print(f'Downloading {file_names[i]} .... {progress:.2f}%')
         
         # Receive EOF
-        data = client_socket.recv(1024) # thấy insecure chỗ này s s
-        buf = data.decode('utf-8')
-        if buf == b"---///---///---///==":
-            pass
+        # data = client_socket.recv(1024) # thấy insecure chỗ này s s
+        # buf = data.decode('utf-8')
 
 
 def isValidFile(file_names, file):
