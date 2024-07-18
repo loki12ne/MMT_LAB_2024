@@ -59,7 +59,7 @@ def receiveFile(client_socket, file_names):
                     break
                     
                 data = base64.b64decode(data) # Potential risk: Khi data truyền vào kp Base64
-                f.write(data)
+                f.write(data) # Q: Đang  "wb" thì line trên decode v có s k
                 received_size += len(data)
 
                 # Progressing bar
