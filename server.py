@@ -60,7 +60,7 @@ def main():
             sendFileList(client_socket)
             file_names = []
             while True:
-                file_name = client_socket.recv(1024).decode()  
+                file_name = client_socket.recv(1024).decode("utf-8")  
                 if not file_name:  
                     break
             file_names.append(file_name)
