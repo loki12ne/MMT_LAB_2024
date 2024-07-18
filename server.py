@@ -63,7 +63,7 @@ def main():
                 file_name = client_socket.recv(1024).decode("utf-8")  
                 if not file_name:  
                     break
-            file_names.append(file_name)
+                file_names.append(file_name)
             sendMultipleFile(client_socket, file_names)
 
     except KeyboardInterrupt:
