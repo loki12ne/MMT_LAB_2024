@@ -1,5 +1,6 @@
 import socket
 import os
+import base64
 
 HOST = "127.0.0.1"
 PORT = 65432
@@ -14,7 +15,17 @@ def sendRequest    (client_socket, _file):
             file_datas = f.read()
             if not file_datas:
                 break
-            client_socket.send(file_datas.encode('utf-8'))
+            data = base64.b64encode(file_datas)       # Encoding the data to Base64
+            client_socket.send(data) # Chưa hiểu rõ lắm, nếu có sửa thì bái lạo nhé
+
+
+# Nhận ds file từ sv để in ra screen
+def receiveFileList(client_socket):
+    while True:
+        data = client_socket.recv(1024)
+        if not data: 
+            break
+        print(f"DTL gửi file coi !")
 
 
 def readInput(_file):
@@ -31,21 +42,25 @@ def readInput(_file):
 
 
 def receiveFile(client_socket, file_names):
-    for i in file_names:
+    for i in file_names: ##########################################################
         if not isValidFile(file_names, file_names[i]):
             continue
 
         received_size = 0
-        file_size = client_socket.recv(1024).decode('utf-8')
+        data = client_socket.recv(1024) # Original binary data
+        file_size = base64.b64decode(data) # Decoding the Base64 data back to original # Potential risk: Khi data truyền vào kp Base64
+        
         with open(file_names[i], "wb") as f:
             while True:
-                data = client_socket.recv(1024).decode('utf-8')
+                data = client_socket.recv(1024) # how to make sure recv đủ 1024
                 if not data:
                     break
-                if data == "---///---///---///==":
+                if data == b"---///---///---///==":
                     break
+                    
+                data = base64.b64decode(data) # Potential risk: Khi data truyền vào kp Base64
                 f.write(data)
-                received_size += len(data) 
+                received_size += len(data)
 
                 # Progressing bar
                 progress = (received_size / file_size) * 100
