@@ -1,3 +1,6 @@
 hahacaiqqjztr.txt 309
 file1.txt 281
 pokemon_temp.txt 1215750
+36.png 1201053
+clipboard-image-1708046155.png 1546234
+normalMode.cpp 16982
