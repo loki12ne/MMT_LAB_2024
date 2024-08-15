@@ -4,7 +4,7 @@ Mạng Máy Tính - LAB - SOCKET - Quản lý tải dữ liệu từ sever đế
 
 
 ######################################################################
-LƯU Ý:
+\nLƯU Ý:
 ######################################################################
 1. Tạo folder download_file, gắn path vào biến toàn cục download_path trong cả 4 file .py
 2. Thay đổi IP và PORT cho phù hợp
