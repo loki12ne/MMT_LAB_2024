@@ -33,8 +33,11 @@ NỘI DUNG:
 SAMPLE FILE: data.txt
 
 ######################################################################
+
 file 1.txt 54MB
+
 file2.zip 34MB
+
 file3.png 1GB
 
 
@@ -44,7 +47,9 @@ file3.png 1GB
 SAMPLE FILE: input.txt (PHẦN 1)
 
 ######################################################################
+
 file2.txt
+
 file9.png
 
 
@@ -58,7 +63,9 @@ CRITICAL = 10 NORMAL
 HIGH = 4 NORMAL
 
 ######################################################################
+
 file2.txt CRITICAL
+
 file9.png HIGH
 
 
