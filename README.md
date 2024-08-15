@@ -1,5 +1,6 @@
 # MMT_LAB_2024
 Mạng Máy Tính - LAB - SOCKET - Quản lý tải dữ liệu từ sever đến client
+
 #THIS IS VIETNAMESE VERSION, PLEASE USE GOOGLE TRANSLATER FOR ENGLISH
 
 
@@ -28,7 +29,9 @@ NỘI DUNG:
 
 
 ######################################################################
+
 SAMPLE FILE: data.txt
+
 ######################################################################
 file 1.txt 54MB
 file2.zip 34MB
@@ -37,7 +40,9 @@ file3.png 1GB
 
 
 ######################################################################
+
 SAMPLE FILE: input.txt (PHẦN 1)
+
 ######################################################################
 file2.txt
 file9.png
@@ -45,9 +50,13 @@ file9.png
 
 
 ######################################################################
+
 SAMPLE FILE: input.txt (PHẦN 2) (3 độ ưu tiên: CRITICAL, HIGH, NORMAL)
+
 CRITICAL = 10 NORMAL
+
 HIGH = 4 NORMAL
+
 ######################################################################
 file2.txt CRITICAL
 file9.png HIGH
